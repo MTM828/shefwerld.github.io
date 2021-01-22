@@ -44,7 +44,7 @@ function mainLoop() {
       ctx.fillRect(platforms[i].x - platforms[i].width / 2, platforms[i].y - platforms[i].height / 2, platforms[i].width, platforms[i].height);
     }
     ctx.fillStyle = 'rgb(0, 0, 255)';
-    ctx.fillRect(player.x - canvas.width / 2, player.y - canvas.height / 2, 40, 40);
+    ctx.fillRect(player.x - 40 / 2, player.y - 40 / 2, 40, 40);
     ctx.restore();
   }
   update();
