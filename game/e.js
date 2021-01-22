@@ -18,7 +18,7 @@ var player = {
   frame: 0,
 }
 var platforms = [
-  {type: 'floor',    x: canvas.width / 2, y: canvas.height / 2 + 10, width: 50, height: 50},
+  {type: 'ground',    x: canvas.width / 2, y: canvas.height / 2 + 10, width: 50, height: 50},
   {type: 'obstacle', x: canvas.width / 2 - 20, y: canvas.height / 2 + 20, width: 50, height: 50},
 ]
 
