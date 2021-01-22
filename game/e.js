@@ -1,7 +1,7 @@
 const errMsg = document.querySelector('#errorDisplay');
-try{
+try {
   setInterval(mainLoop, 20);
-}catch(err){
+} catch(err) {
   errMsg.innerHTML = err.stack + err.name + err.message;
 }
 
@@ -16,11 +16,11 @@ var player = {
   velX:  0,
   velY:  0,
   frame: 0,
-};
+}
 var platforms = [
   {type: 'floor',    x: canvas.width / 2, y: canvas.height / 2 + 10, width: 50, height: 50},
-  {type: 'obstacle', x: canvas.width / 2, y: canvas.height / 2 + 20, width: 50, height: 50},
-];
+  {type: 'obstacle', x: canvas.width / 2 - 20, y: canvas.height / 2 + 20, width: 50, height: 50},
+]
 
 function mainLoop() {
   function clear(clr) {
