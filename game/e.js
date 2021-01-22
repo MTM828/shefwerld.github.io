@@ -1,9 +1,9 @@
 const errMsg = document.querySelector('#errorDisplay');
-try{
-  setInterval(mainLoop(), 20);
+/*try{
+  */setInterval(mainLoop(), 20);/*
 }catch(err){
   errMsg.innerHTML = err.stack + err.name + err.message;
-}
+}*/
 
 const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
