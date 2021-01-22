@@ -4,7 +4,6 @@ try {
 } catch(err) {
   errMsg.innerHTML = err.stack + err.name + err.message;
 }
-
 const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
 
@@ -18,7 +17,7 @@ var player = {
   frame: 0,
 }
 var platforms = [
-  {type: 'ground',    x: canvas.width / 2, y: canvas.height / 2 + 50, width: 50, height: 50},
+  {type: 'ground',   x: canvas.width / 2,      y: canvas.height / 2 + 50, width: 50, height: 50},
   {type: 'obstacle', x: canvas.width / 2 - 50, y: canvas.height / 2 + 50, width: 50, height: 50},
 ]
 
@@ -45,7 +44,7 @@ function mainLoop() {
       ctx.fillRect(platforms[i].x - platforms[i].width / 2, platforms[i].y - platforms[i].height / 2, platforms[i].width, platforms[i].height);
     }
     ctx.fillStyle = 'rgb(0, 0, 255)';
-    ctx.fillRect(player.x, player.y, 40, 40);
+    ctx.fillRect(player.x - canvas.width / 2, player.y - canvas.height / 2, 40, 40);
     ctx.restore();
   }
   update();
