@@ -19,4 +19,4 @@ function mainLoop() {
   ctx.fillStyle = 'rgb(135, 206, 235)';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
-setInterval(function(){try{mainLoop();}catch(err){errMsg.innerHTML = err;}}, 20);
+setInterval(function(){try{mainLoop();}catch(err){errMsg.innerHTML = err.stack + err.name + err.message;}}, 20);
