@@ -9,8 +9,8 @@ const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
 
 var platforms = [
-  {type: 'floor',    x, canvas.width / 2, y: canvas.height / 2 + 10, width: 50,  height: 50},
-  {type: 'obstacle', x, canvas.width / 2, y: canvas.height / 2 + 20, width: 50, height: 50},
+  {type: 'floor',    x: canvas.width / 2, y: canvas.height / 2 + 10, width: 50,  height: 50},
+  {type: 'obstacle', x: canvas.width / 2, y: canvas.height / 2 + 20, width: 50, height: 50},
 ];
 
 var player = {
