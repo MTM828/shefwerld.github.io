@@ -42,4 +42,5 @@ function mainLoop() {
       }
       ctx.fillRect(platforms[i].x - platforms[i].width / 2, platforms[i].y - platforms[i].height / 2, platforms[i].width, platforms[i].height);
     }
+    render();
 }
