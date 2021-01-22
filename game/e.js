@@ -1,6 +1,6 @@
 const errMsg = document.querySelector('#errorDisplay');
 /*try{
-  */setInterval(mainLoop(), 20);/*
+  */setInterval(mainLoop, 20);/*
 }catch(err){
   errMsg.innerHTML = err.stack + err.name + err.message;
 }*/
