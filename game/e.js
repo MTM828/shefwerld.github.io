@@ -23,6 +23,7 @@ var platforms = [
 ]
 
 function mainLoop() {
+  function update() {}
   function clear(clr) {
     ctx.save();
     ctx.fillStyle = clr;
@@ -30,6 +31,7 @@ function mainLoop() {
     ctx.restore();
   }
   function render() {
+    ctx.save();
     clear('rgb(135, 206, 235)');
     for (i = 0; i < platforms.length; i++) {
       switch(platforms [i].type) {
@@ -42,6 +44,10 @@ function mainLoop() {
       }
       ctx.fillRect(platforms[i].x - platforms[i].width / 2, platforms[i].y - platforms[i].height / 2, platforms[i].width, platforms[i].height);
     }
+    ctx.fillStyle = 'rgb(0, 0, 255)';
+    ctx.fillRect(player.x, player.y, 40, 40);
+    ctx.restore();
   }
+  update();
   render();
 }
