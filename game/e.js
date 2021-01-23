@@ -2,7 +2,7 @@ const errMsg = document.querySelector('#errorDisplay');
 try {
   mainLoop();
 } catch(err) {
-  errMsg.innerHTML = err.stack + err.name + err.message;
+  errMsg.innerHTML = err.stack;
 }
 const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
@@ -14,7 +14,7 @@ var elapsedTime;
 var oldTime;
 var frameCount = 0;
 var fps = 60;
-var delay = 1000 / fps;
+var frameDelay = 1000 / fps;
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -51,7 +51,7 @@ function mainLoop() {
   currentTime = window.performance.now();
   elapsedTime = currentTime - oldTime;
   requestAnimationFrame(mainLoop);
-  if (!elapsed > delay) {
+  if (!elapsedTime > frameDelay) {
     return;
   }
   oldTime = currentTime();
