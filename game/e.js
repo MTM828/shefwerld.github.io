@@ -32,7 +32,7 @@ var player = {
   col: function() {
     var returnVal = false;
     for (i = 0; i < platforms.length; i++) {
-      if (!col(this.x - this.width / 2, this.y - this.height / 2, this.width, this.height, platforms[i].x - platforms[i].width / 2, platforms[i].y - platforms[i].height / 2, platforms[i].width, platforms[i].height)) {returnval = true; console.log('col');}
+      if (!col(this.x - this.width / 2, this.y - this.height / 2, 40, 40, platforms[i].x - platforms[i].width / 2, platforms[i].y - platforms[i].height / 2, platforms[i].width, platforms[i].height)) {returnval = true; console.log('col');}
     }
     return returnVal;
 	/*
@@ -99,10 +99,15 @@ function mainLoop() {
             ctx.fillStyle = 'rgb(179, 0, 12)';
             break;
       }
-      ctx.fillRect(platforms[i].x - platforms[i].width / 2, platforms[i].y - platforms[i].height / 2, platforms[i].width, platforms[i].height);
+      ctx.fillRect(
+	    platforms[i].x - platforms[i].width  / 2 + player.x,
+		platforms[i].y + platforms[i].height / 2 - player.y,
+		platforms[i].width,
+		platforms[i].height
+	  );
     }
     ctx.fillStyle = 'rgb(0, 0, 255)';
-    ctx.fillRect(player.x - 40 / 2, player.y - 40 / 2, 40, 40);
+    ctx.fillRect(canvas.width / 2 - 40 / 2, canvas.height / 2 - 40 / 2, 40, 40);
     ctx.restore();
   }
   update();
