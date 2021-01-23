@@ -24,8 +24,8 @@ function col(x1, y1, w1, h1, x2, y2, w2, h2) {
   return ((x1-w1*0.5 < x2-w2*-0.5) && (x1+w1*0.5 > x2+w2*-0.5)) && ((y1-h1*0.5 < y2-h2*-0.5) && (y1+h1*0.5 > y2+h2*-0.5));
 }
 var player = {
-  x: canvas.width  / 2,
-  y: canvas.height / 2,
+  x: 0,
+  y: 0,
   velX:  0,
   velY:  0,
   frame: 0,
@@ -55,8 +55,8 @@ var physics = {
   maxMovementSpeed: 5,
 }
 var platforms = [
-  {type: 'ground',   x: canvas.width / 2,      y: canvas.height / 2 + 50, width: 50, height: 50},
-  {type: 'obstacle', x: canvas.width / 2 - 50, y: canvas.height / 2 + 50, width: 50, height: 50},
+  {type: 'ground',   x: 0,      y: 50, width: 50, height: 50},
+  {type: 'obstacle', x: 0 - 50, y: 50, width: 50, height: 50},
 ]
 
 oldTime = window.performance.now();
@@ -100,8 +100,8 @@ function mainLoop() {
             break;
       }
       ctx.fillRect(
-	    platforms[i].x - platforms[i].width  / 2 + player.x,
-		platforms[i].y + platforms[i].height / 2 - player.y,
+	    platforms[i].x - (platforms[i].width  / 2 - player.x) + canvas.width  / 2,
+		platforms[i].y + (platforms[i].height / 2 - player.y) + canvas.height / 2,
 		platforms[i].width,
 		platforms[i].height
 	  );
