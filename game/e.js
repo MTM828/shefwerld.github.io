@@ -54,7 +54,7 @@ function mainLoop() {
   if (!elapsedTime > frameDelay) {
     return;
   }
-  oldTime = currentTime();
+  oldTime = currentTime;
   function update() {
     player.velY += physics.gravity;
     if (player.col) {
