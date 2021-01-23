@@ -1,6 +1,6 @@
 const errMsg = document.querySelector('#errorDisplay');
 try {
-  setInterval(mainLoop, 20);
+  mainLoop();
 } catch(err) {
   errMsg.innerHTML = err.stack + err.name + err.message;
 }
@@ -75,4 +75,5 @@ function mainLoop() {
   }
   update();
   render();
+  requestAnimationFrame(mainLoop);
 }
