@@ -1,3 +1,6 @@
+<canvas id='canvas'></canvas>
+<p id='errorDisplay'></p>
+<script>
 const errMsg = document.querySelector('#errorDisplay');
 window.onload = function() {
   try {
@@ -30,14 +33,25 @@ var player = {
   velY:  0,
   frame: 0,
   col: function() {
+    var returnVal = false;
     for (i = 0; i < platforms.length; i++) {
-      if (col(this.x, this.y, 40, 40, platforms[i].x, platforms[i].y, platforms[i].length, platforms[i].height)) {return true;}
+      if (!col(this.x - this.width / 2, this.y - this.height / 2, this.width, this.height, platforms[i].x - platforms[i].width / 2, platforms[i].y - platforms[i].height / 2, platforms[i].width, platforms[i].height)) {returnval = true; console.log('col');}
     }
-    return false;
+    return returnVal;
+	/*
+	var returnVal = false;
+	for (i = 0; i < platforms.length; i++) {
+	  if (col(player.x, player.y)) {
+	    returnVal = true;
+	  }
+	}
+	return returnVal;
+	*/
   },
 }
 var physics = {
   jumpHeight: 12,
+  gravity: 0.3,
   maxGravity: 25,
   movementSpeed: 0.3,
   friction: 0.1,
@@ -50,6 +64,7 @@ var platforms = [
 
 oldTime = window.performance.now();
 function mainLoop() {
+
   currentTime = window.performance.now();
   elapsedTime = currentTime - oldTime;
   requestAnimationFrame(mainLoop);
@@ -57,11 +72,12 @@ function mainLoop() {
     return;
   }
   oldTime = currentTime;
+
   function update() {
     player.velY += physics.gravity;
-    if (player.col) {
-      while (player.col) {
-        player.y -= 0.1;
+    if (player.col()) {
+      while (player.col()) {
+        player.y += 0.1;
       }
       player.velY = 0;
     }
@@ -95,3 +111,4 @@ function mainLoop() {
   update();
   render();
 }
+</script>
