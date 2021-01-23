@@ -23,6 +23,13 @@ function sleep(ms) {
 function col(x1, y1, w1, h1, x2, y2, w2, h2) {
   return ((x1-w1*0.5 < x2-w2*-0.5) && (x1+w1*0.5 > x2+w2*-0.5)) && ((y1-h1*0.5 < y2-h2*-0.5) && (y1+h1*0.5 > y2+h2*-0.5));
 }
+function colliding() {
+  var returnVal = false;
+  for (i = 0; i < platforms.length; i++) {
+    if (col(player.x - 40 / 2, player.y - 40 / 2, 40, 40, platforms[i].x - platforms[i].width / 2, platforms[i].y - platforms[i].height / 2, platforms[i].width, platforms[i].height)) {returnval = true; console.log('col');}
+  }
+  return returnVal;
+}
 var player = {
   x: 0,
   y: 0,
@@ -32,7 +39,7 @@ var player = {
   col: function() {
     var returnVal = false;
     for (i = 0; i < platforms.length; i++) {
-      if (!col(this.x - this.width / 2, this.y - this.height / 2, 40, 40, platforms[i].x - platforms[i].width / 2, platforms[i].y - platforms[i].height / 2, platforms[i].width, platforms[i].height)) {returnval = true; console.log('col');}
+      if (col(this.x - this.width / 2, this.y - this.height / 2, 40, 40, platforms[i].x - platforms[i].width / 2, platforms[i].y - platforms[i].height / 2, platforms[i].width, platforms[i].height)) {returnval = true; console.log('col');}
     }
     return returnVal;
 	/*
@@ -72,8 +79,8 @@ function mainLoop() {
 
   function update() {
     player.velY += physics.gravity;
-    if (player.col()) {
-      while (player.col()) {
+    if (colliding()) {
+      while (colliding()) {
         player.y += 0.1;
       }
       player.velY = 0;
