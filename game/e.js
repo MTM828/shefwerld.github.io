@@ -9,6 +9,15 @@ const ctx = canvas.getContext('2d');
 
 var i;
 var j;
+var currentTime;
+var elapsedTime;
+var oldTime;
+var frameCount = 0;
+var fps = 60;
+var delay = 1000 / fps;
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 function col(x1, y1, w1, h1, x2, y2, w2, h2) {
   return ((x1-w1*0.5 < x2-w2*-0.5) && (x1+w1*0.5 > x2+w2*-0.5)) && ((y1-h1*0.5 < y2-h2*-0.5) && (y1+h1*0.5 > y2+h2*-0.5));
 }
@@ -37,7 +46,15 @@ var platforms = [
   {type: 'obstacle', x: canvas.width / 2 - 50, y: canvas.height / 2 + 50, width: 50, height: 50},
 ]
 
+oldTime = window.performance.now();
 function mainLoop() {
+  currentTime = window.performance.now();
+  elapsedTime = currentTime - oldTime;
+  requestAnimationFrame(mainLoop);
+  if (!elapsed > delay) {
+    return;
+  }
+  oldTime = currentTime();
   function update() {
     player.velY += physics.gravity;
     if (player.col) {
@@ -75,5 +92,4 @@ function mainLoop() {
   }
   update();
   render();
-  requestAnimationFrame(mainLoop);
 }
