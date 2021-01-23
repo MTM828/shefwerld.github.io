@@ -1,6 +1,3 @@
-<canvas id='canvas'></canvas>
-<p id='errorDisplay'></p>
-<script>
 const errMsg = document.querySelector('#errorDisplay');
 window.onload = function() {
   try {
@@ -111,4 +108,3 @@ function mainLoop() {
   update();
   render();
 }
-</script>
