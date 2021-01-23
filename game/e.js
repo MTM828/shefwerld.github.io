@@ -1,8 +1,10 @@
 const errMsg = document.querySelector('#errorDisplay');
-try {
-  mainLoop();
-} catch(err) {
-  errMsg.innerHTML = err.stack;
+window.onload = function() {
+  try {
+    mainLoop();
+  } catch(err) {
+    errMsg.innerHTML = err.stack;
+  }
 }
 const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
