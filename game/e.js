@@ -11,12 +11,14 @@ const ctx = canvas.getContext('2d');
 
 var i;
 var j;
+
 var currentTime;
 var elapsedTime;
 var oldTime;
 var frameCount = 0;
 var fps = 60;
 var frameDelay = 1000 / fps;
+
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -30,6 +32,7 @@ function colliding() {
   }
   return returnVal;
 }
+
 var player = {
   x: 0,
   y: 0,
@@ -66,9 +69,82 @@ var platforms = [
   {type: 'obstacle', x: 0 - 50, y: 50, width: 50, height: 50},
 ]
 
+var keys = {
+    w: false,
+    a: false,
+    s: false,
+    d: false,
+    rtArrow: false,
+    ltArrow: false,
+    upArrow: false,
+    dnArrow: false,
+    space: false
+}
+function onKeyDown(event) {
+    var keyCode = event.which;
+    if (keyCode == 87) {
+        keys.w = true;
+    }
+    if (keyCode == 83) {
+        keys.s = true;
+    }
+    if (keyCode == 65) {
+        keys.a = true;
+    }
+    if (keyCode == 68) {
+        keys.d = true;
+    }
+    if (keyCode == 38) {
+        keys.upArrow = true;
+    }
+    if (keyCode == 40) {
+        keys.dnArrow = true;
+    }
+    if (keyCode == 37) {
+        keys.ltArrow = true;
+    }
+    if (keyCode == 39) {
+        keys.rtArrow = true;
+    }
+    if (keyCode == 32) {
+        keys.space = true;
+    }
+}
+function onKeyUp(event) {
+    var keyCode = event.which;
+    if (keyCode == 87) {
+        keys.w = false;
+    }
+    if (keyCode == 83) {
+        keys.s = false;
+    }
+    if (keyCode == 65) {
+        keys.a = false;
+    }
+    if (keyCode == 68) {
+        keys.d = false;
+    }
+    if (keyCode == 38) {
+        keys.upArrow = false;
+    }
+    if (keyCode == 40) {
+        keys.dnArrow = false;
+    }
+    if (keyCode == 37) {
+        keys.ltArrow = false;
+    }
+    if (keyCode == 39) {
+        keys.rtArrow = false;
+    }
+    if (keyCode == 32) {
+        keys.space = false;
+    }
+}
+document.addEventListener("keydown", onKeyDown, false);
+document.addEventListener("keyup", onKeyUp, false);
 oldTime = window.performance.now();
-function mainLoop() {
 
+function mainLoop() {
   currentTime = window.performance.now();
   elapsedTime = currentTime - oldTime;
   requestAnimationFrame(mainLoop);
@@ -78,10 +154,13 @@ function mainLoop() {
   oldTime = currentTime;
 
   function update() {
+    if (keys.rtArrow) {player.velX += physics.movementSpeed;}
+    if (keys.rtArrow) {player.velX -= physics.movementSpeed;}
+    if (Math.abs(velX) > physics.maxMovementSpeed) {if (player.velX > 0) {player.velX = gravity.player.maxMovementSpeed;} else {player.velX = -gravity.maxMovementSpeed;}}
     player.velY += physics.gravity;
     if (colliding()) {
       while (colliding()) {
-        player.y += 0.1;
+        player.y -= 0.1;
       }
       player.velY = 0;
     }
