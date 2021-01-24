@@ -23,12 +23,19 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 function col(x1, y1, w1, h1, x2, y2, w2, h2) {
-  return ((x1-w1*0.5 < x2-w2*-0.5) && (x1+w1*0.5 > x2+w2*-0.5)) && ((y1-h1*0.5 < y2-h2*-0.5) && (y1+h1*0.5 > y2+h2*-0.5));
+  return ((x1 + w1 > x2) && ( x1 < x2 + w2)) && ((y1 + h1 > y2) && ( y1 < y2 + h2));
 }
 function colliding() {
   var returnVal = false;
   for (i = 0; i < platforms.length; i++) {
-    if (col(player.x - 40 / 2, player.y - 40 / 2, 40, 40, platforms[i].x - platforms[i].width / 2, platforms[i].y - platforms[i].height / 2, platforms[i].width, platforms[i].height)) {returnval = true; console.log('col');}
+    if (col(
+	  player.x - 20,
+	  player.y + 20,
+	  40, 40,
+	  platforms[i].x - 25,
+	  platforms[i].y - 25,
+	  50, 50
+	)) {returnVal = true;}
   }
   return returnVal;
 }
@@ -39,34 +46,22 @@ var player = {
   velX:  0,
   velY:  0,
   frame: 0,
-  col: function() {
-    var returnVal = false;
-    for (i = 0; i < platforms.length; i++) {
-      if (col(this.x - this.width / 2, this.y - this.height / 2, 40, 40, platforms[i].x - platforms[i].width / 2, platforms[i].y - platforms[i].height / 2, platforms[i].width, platforms[i].height)) {returnval = true; console.log('col');}
-    }
-    return returnVal;
-	/*
-	var returnVal = false;
-	for (i = 0; i < platforms.length; i++) {
-	  if (col(player.x, player.y)) {
-	    returnVal = true;
-	  }
-	}
-	return returnVal;
-	*/
-  },
 }
 var physics = {
   jumpHeight: 12,
   gravity: 0.3,
   maxGravity: 25,
   movementSpeed: 0.3,
-  friction: 0.1,
+  friction: 0.9,
   maxMovementSpeed: 5,
 }
 var platforms = [
-  {type: 'ground',   x: 0,      y: 50, width: 50, height: 50},
-  {type: 'obstacle', x: 0 - 50, y: 50, width: 50, height: 50},
+  {type: 'ground',   x: 0,  y: 50, width: 50, height: 50},
+  {type: 'ground',   x: 100,y:100, width: 50, height: 50},
+  {type: 'obstacle', x: 50, y: 50, width: 50, height: 50},
+  {type: 'ground',   x: 0,  y: 50 + 200, width: 50, height: 50},
+  {type: 'ground',   x: 100,y:100 + 200, width: 50, height: 50},
+  {type: 'obstacle', x: 50, y: 50 + 200, width: 50, height: 50},
 ]
 
 var keys = {
@@ -148,25 +143,31 @@ function mainLoop() {
   currentTime = window.performance.now();
   elapsedTime = currentTime - oldTime;
   requestAnimationFrame(mainLoop);
-  if (!elapsedTime > frameDelay) {
-    return;
-  }
+  if (!elapsedTime > frameDelay) {return;}
   oldTime = currentTime;
 
   function update() {
-    if (keys.rtArrow) {player.velX += physics.movementSpeed;}
-    if (keys.rtArrow) {player.velX -= physics.movementSpeed;}
-    if (Math.abs(player.velX) > physics.maxMovementSpeed) {if (player.velX > 0) {player.velX = gravity.player.maxMovementSpeed;} else {player.velX = -gravity.maxMovementSpeed;}}
+
+    player.y += player.velY;
     player.velY += physics.gravity;
     if (colliding()) {
-      while (colliding()) {
-        player.y -= 0.1;
-      }
-      player.velY = 0;
+      while (colliding()) {if (player.velY > 0) {player.y -= 0.1;} else if (player.velY < 0) {player.y += 0.1;}}
+	  if (keys.upArrow && player.velY > 0) {player.velY = -physics.jumpHeight;} else {player.velY = 0;} 
     }
-    player.y += player.velY;
+	if (Math.abs(player.velY) > physics.maxGravity) {if (player.vely > 0) {player.velY = physics.maxGravity;} else if (player.vely < 0) {player.velY = -physics.maxGravity;}}
+
+	player.velX *= physics.friction;
+    if (keys.rtArrow) {player.velX += physics.movementSpeed;}
+    if (keys.ltArrow) {player.velX -= physics.movementSpeed;}
+    if (Math.abs(player.velX) > physics.maxMovementSpeed) {if (player.velX > 0) {player.velX = physics.maxMovementSpeed;} else {player.velX = -physics.maxMovementSpeed;}}
     player.x += player.velX;
+	if (colliding()) {
+	  while (colliding()) {if (player.velX > 0) {player.x -= 0.1} else if (player.velX < 0) {player.x += 0.1}}
+	  player.velX = 0;
+	}
+
   }
+
   function clear(clr) {
     ctx.save();
     ctx.fillStyle = clr;
@@ -177,7 +178,7 @@ function mainLoop() {
     ctx.save();
     clear('rgb(135, 206, 235)');
     for (i = 0; i < platforms.length; i++) {
-      switch(platforms [i].type) {
+      switch (platforms [i].type) {
           case 'ground':
             ctx.fillStyle = 'rgb(0, 179, 44)';
             break;
@@ -185,15 +186,15 @@ function mainLoop() {
             ctx.fillStyle = 'rgb(179, 0, 12)';
             break;
       }
-      ctx.fillRect(
-	    platforms[i].x - (platforms[i].width  / 2 - player.x) + canvas.width  / 2,
-		platforms[i].y + (platforms[i].height / 2 - player.y) + canvas.height / 2,
+	  ctx.fillRect(
+	    platforms[i].x + 30 - platforms[i].width  + canvas.width  / 2 - player.x,
+		platforms[i].y - 20 - platforms[i].height + canvas.height / 2 - player.y,
 		platforms[i].width,
 		platforms[i].height
 	  );
     }
     ctx.fillStyle = 'rgb(0, 0, 255)';
-    ctx.fillRect(canvas.width / 2 - 40 / 2, canvas.height / 2 - 40 / 2, 40, 40);
+	ctx.fillRect(canvas.width / 2 - 15, canvas.height / 2 - 25, 40, 40);
     ctx.restore();
   }
   update();
