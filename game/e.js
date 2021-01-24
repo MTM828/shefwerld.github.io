@@ -156,7 +156,7 @@ function mainLoop() {
   function update() {
     if (keys.rtArrow) {player.velX += physics.movementSpeed;}
     if (keys.rtArrow) {player.velX -= physics.movementSpeed;}
-    if (Math.abs(velX) > physics.maxMovementSpeed) {if (player.velX > 0) {player.velX = gravity.player.maxMovementSpeed;} else {player.velX = -gravity.maxMovementSpeed;}}
+    if (Math.abs(player.velX) > physics.maxMovementSpeed) {if (player.velX > 0) {player.velX = gravity.player.maxMovementSpeed;} else {player.velX = -gravity.maxMovementSpeed;}}
     player.velY += physics.gravity;
     if (colliding()) {
       while (colliding()) {
