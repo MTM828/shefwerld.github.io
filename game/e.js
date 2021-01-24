@@ -29,13 +29,13 @@ function colliding() {
   var returnVal = false;
   for (i = 0; i < platforms.length; i++) {
     if (col(
-	  player.x - 20,
-	  player.y + 20,
-	  40, 40,
-	  platforms[i].x - 25,
-	  platforms[i].y - 25,
-	  50, 50
-	)) {returnVal = true;}
+      player.x - 20,
+      player.y + 20,
+      40, 40,
+      platforms[i].x - platforms[i].width + 25,
+      platforms[i].y - platforms[i].height * 0.5,
+      platforms[i].width, platforms[i].height
+  )) {returnVal = true;}
   }
   return returnVal;
 }
@@ -56,12 +56,9 @@ var physics = {
   maxMovementSpeed: 5,
 }
 var platforms = [
-  {type: 'ground',   x: 0,  y: 50, width: 50, height: 50},
-  {type: 'ground',   x: 100,y:100, width: 50, height: 50},
-  {type: 'obstacle', x: 50, y: 50, width: 50, height: 50},
-  {type: 'ground',   x: 0,  y: 50 + 200, width: 50, height: 50},
-  {type: 'ground',   x: 100,y:100 + 200, width: 50, height: 50},
-  {type: 'obstacle', x: 50, y: 50 + 200, width: 50, height: 50},
+  {type: 'ground', x: 0, y: 100, width: 500, height: 50},
+  {type: 'ground', x: 0, y: 300, width: 500, height: 50},
+  {type: 'obstacle', x: 0, y: 500, width: 500, height: 50},
 ]
 
 var keys = {
@@ -143,7 +140,7 @@ function mainLoop() {
   currentTime = window.performance.now();
   elapsedTime = currentTime - oldTime;
   requestAnimationFrame(mainLoop);
-  if (!elapsedTime > frameDelay) {return;}
+  if (!elapsedTime > frameDelay) {while (!elapsedTime > frameDisplay) {}}
   oldTime = currentTime;
 
   function update() {
@@ -152,19 +149,19 @@ function mainLoop() {
     player.velY += physics.gravity;
     if (colliding()) {
       while (colliding()) {if (player.velY > 0) {player.y -= 0.1;} else if (player.velY < 0) {player.y += 0.1;}}
-	  if (keys.upArrow && player.velY > 0) {player.velY = -physics.jumpHeight;} else {player.velY = 0;} 
+      if (keys.upArrow && player.velY > 0) {player.velY = -physics.jumpHeight;} else {player.velY = 0;} 
     }
-	if (Math.abs(player.velY) > physics.maxGravity) {if (player.vely > 0) {player.velY = physics.maxGravity;} else if (player.vely < 0) {player.velY = -physics.maxGravity;}}
+    if (Math.abs(player.velY) > physics.maxGravity) {if (player.vely > 0) {player.velY = physics.maxGravity;} else if (player.vely < 0) {player.velY = -physics.maxGravity;}}
 
-	player.velX *= physics.friction;
+    player.velX *= physics.friction;
     if (keys.rtArrow) {player.velX += physics.movementSpeed;}
     if (keys.ltArrow) {player.velX -= physics.movementSpeed;}
     if (Math.abs(player.velX) > physics.maxMovementSpeed) {if (player.velX > 0) {player.velX = physics.maxMovementSpeed;} else {player.velX = -physics.maxMovementSpeed;}}
     player.x += player.velX;
-	if (colliding()) {
-	  while (colliding()) {if (player.velX > 0) {player.x -= 0.1} else if (player.velX < 0) {player.x += 0.1}}
-	  player.velX = 0;
-	}
+    if (colliding()) {
+    while (colliding()) {if (player.velX > 0) {player.x -= 0.1} else if (player.velX < 0) {player.x += 0.1}}
+    player.velX = 0;
+    }
 
   }
 
@@ -186,15 +183,15 @@ function mainLoop() {
             ctx.fillStyle = 'rgb(179, 0, 12)';
             break;
       }
-	  ctx.fillRect(
-	    platforms[i].x + 30 - platforms[i].width  + canvas.width  / 2 - player.x,
-		platforms[i].y - 20 - platforms[i].height + canvas.height / 2 - player.y,
-		platforms[i].width,
-		platforms[i].height
-	  );
+      ctx.fillRect(
+        platforms[i].x + 30 - platforms[i].width  + canvas.width  / 2 - player.x,
+        platforms[i].y - 20 - platforms[i].height + canvas.height / 2 - player.y,
+        platforms[i].width,
+        platforms[i].height
+      );
     }
     ctx.fillStyle = 'rgb(0, 0, 255)';
-	ctx.fillRect(canvas.width / 2 - 15, canvas.height / 2 - 25, 40, 40);
+    ctx.fillRect(canvas.width / 2 - 15, canvas.height / 2 - 25, 40, 40);
     ctx.restore();
   }
   update();
