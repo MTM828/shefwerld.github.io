@@ -19,9 +19,6 @@ var frameCount = 0;
 var fps = 60;
 var frameDelay = 1000 / fps;
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
 function col(x1, y1, w1, h1, x2, y2, w2, h2) {
   return ((x1 + w1 > x2) && ( x1 < x2 + w2)) && ((y1 + h1 > y2) && ( y1 < y2 + h2));
 }
@@ -39,6 +36,9 @@ function colliding() {
   }
   return returnVal;
 }
+function renderSpriteSheetImg(spritesheet, imgIndex, x, y) {
+  ctx.drawImage(imgIndex * 2, 0, 50, 50, x, y, 40, 40);
+}
 
 var player = {
   x: 0,
@@ -46,7 +46,10 @@ var player = {
   velX:  0,
   velY:  0,
   frame: 0,
+  spriteSheet: new Image(),
 }
+player.spriteSheet.src = './img/spritesheet.png';
+
 var physics = {
   jumpHeight: 12,
   gravity: 0.3,
@@ -56,9 +59,12 @@ var physics = {
   maxMovementSpeed: 5,
 }
 var platforms = [
-  {type: 'ground', x: 0, y: 100, width: 500, height: 50},
-  {type: 'ground', x: 0, y: 300, width: 500, height: 50},
-  {type: 'obstacle', x: 0, y: 500, width: 500, height: 50},
+  {type: 'ground',   x: 0,   y: 100, width: 500,  height: 50},
+  {type: 'ground',   x: 0,   y: 300, width: 500,  height: 50},
+  {type: 'obstacle', x: 0,   y: 500, width: 500,  height: 50},
+  {type: 'ground',   x: 250, y: 700, width: 1000, height: 50},
+  {type: 'ground',   x: 450, y: 500, width: 50,   height: 50},
+  {type: 'ground',   x: 250, y: 300, width: 50,   height: 50},
 ]
 
 var keys = {
@@ -153,7 +159,7 @@ function mainLoop() {
     }
     if (Math.abs(player.velY) > physics.maxGravity) {if (player.vely > 0) {player.velY = physics.maxGravity;} else if (player.vely < 0) {player.velY = -physics.maxGravity;}}
 
-    player.velX *= physics.friction;
+    if (!keys.rtArrow && !keys.ltArrow) {player.velX *= physics.friction;}
     if (keys.rtArrow) {player.velX += physics.movementSpeed;}
     if (keys.ltArrow) {player.velX -= physics.movementSpeed;}
     if (Math.abs(player.velX) > physics.maxMovementSpeed) {if (player.velX > 0) {player.velX = physics.maxMovementSpeed;} else {player.velX = -physics.maxMovementSpeed;}}
@@ -191,7 +197,8 @@ function mainLoop() {
       );
     }
     ctx.fillStyle = 'rgb(0, 0, 255)';
-    ctx.fillRect(canvas.width / 2 - 15, canvas.height / 2 - 25, 40, 40);
+    //ctx.fillRect(canvas.width / 2 - 15, canvas.height / 2 - 25, 40, 40);
+	if (player.spriteSheet.complete) {ctx.drawImage(player.spriteSheet, 0, 0, 35, 26, canvas.width / 2 - 15, canvas.height / 2 - 25, 40, 40);}
     ctx.restore();
   }
   update();
