@@ -155,7 +155,7 @@ function mainLoop() {
     ctx.save();
     clear('rgb(135, 206, 235)');
     for (i = 0; i < platforms.length; i++) {
-      switch (platforms [i].type) {
+      switch (platforms[i].type) {
           case 'ground':
             ctx.fillStyle = 'rgb(0, 179, 44)';
             break;
