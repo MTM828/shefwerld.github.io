@@ -40,15 +40,24 @@ function renderSpriteSheetImg(spritesheet, imgIndex, x, y) {
   ctx.drawImage(imgIndex * 2, 0, 50, 50, x, y, 40, 40);
 }
 
+const spriteSheets = {
+  tiles:   new Image(),
+  player:  new Image(),
+  objects: new Image(),
+  enemies: new Image(),
+}
+spriteSheets.tiles.src   = './tileSpriteSheet.png';
+spriteSheets.player.src  = './playerSpriteSheet.png';
+spriteSheets.objects.src = './objectSpriteSheet.png';
+spriteSheets.enemies.src = './enemySpriteSheet.png';
+
 var player = {
   x: 0,
   y: 0,
   velX:  0,
   velY:  0,
   frame: 0,
-  spriteSheet: new Image(),
 }
-player.spriteSheet.src = './img/spritesheet.png';
 
 var physics = {
   jumpHeight: 12,
@@ -76,67 +85,31 @@ var keys = {
     ltArrow: false,
     upArrow: false,
     dnArrow: false,
-    space: false
+    space: false,
 }
 function onKeyDown(event) {
     var keyCode = event.which;
-    if (keyCode == 87) {
-        keys.w = true;
-    }
-    if (keyCode == 83) {
-        keys.s = true;
-    }
-    if (keyCode == 65) {
-        keys.a = true;
-    }
-    if (keyCode == 68) {
-        keys.d = true;
-    }
-    if (keyCode == 38) {
-        keys.upArrow = true;
-    }
-    if (keyCode == 40) {
-        keys.dnArrow = true;
-    }
-    if (keyCode == 37) {
-        keys.ltArrow = true;
-    }
-    if (keyCode == 39) {
-        keys.rtArrow = true;
-    }
-    if (keyCode == 32) {
-        keys.space = true;
-    }
+    if (keyCode == 87) {keys.w = true;}
+    if (keyCode == 83) {keys.s = true;}
+    if (keyCode == 65) {keys.a = true;}
+    if (keyCode == 68) {keys.d = true;}
+    if (keyCode == 38) {keys.upArrow = true;}
+    if (keyCode == 40) {keys.dnArrow = true;}
+    if (keyCode == 37) {keys.ltArrow = true;}
+    if (keyCode == 39) {keys.rtArrow = true;}
+    if (keyCode == 32) {keys.space = true;}
 }
 function onKeyUp(event) {
     var keyCode = event.which;
-    if (keyCode == 87) {
-        keys.w = false;
-    }
-    if (keyCode == 83) {
-        keys.s = false;
-    }
-    if (keyCode == 65) {
-        keys.a = false;
-    }
-    if (keyCode == 68) {
-        keys.d = false;
-    }
-    if (keyCode == 38) {
-        keys.upArrow = false;
-    }
-    if (keyCode == 40) {
-        keys.dnArrow = false;
-    }
-    if (keyCode == 37) {
-        keys.ltArrow = false;
-    }
-    if (keyCode == 39) {
-        keys.rtArrow = false;
-    }
-    if (keyCode == 32) {
-        keys.space = false;
-    }
+    if (keyCode == 87) {keys.w = false;}
+    if (keyCode == 83) {keys.s = false;}
+    if (keyCode == 65) {keys.a = false;}
+    if (keyCode == 68) {keys.d = false;}
+    if (keyCode == 38) {keys.upArrow = false;}
+    if (keyCode == 40) {keys.dnArrow = false;}
+    if (keyCode == 37) {keys.ltArrow = false;}
+    if (keyCode == 39) {keys.rtArrow = false;}
+    if (keyCode == 32) {keys.space = false;}
 }
 document.addEventListener("keydown", onKeyDown, false);
 document.addEventListener("keyup", onKeyUp, false);
@@ -150,25 +123,26 @@ function mainLoop() {
   oldTime = currentTime;
 
   function update() {
-
     player.y += player.velY;
     player.velY += physics.gravity;
     if (colliding()) {
       while (colliding()) {if (player.velY > 0) {player.y -= 0.1;} else if (player.velY < 0) {player.y += 0.1;}}
       if (keys.upArrow && player.velY > 0) {player.velY = -physics.jumpHeight;} else {player.velY = 0;} 
     }
-    if (Math.abs(player.velY) > physics.maxGravity) {if (player.vely > 0) {player.velY = physics.maxGravity;} else if (player.vely < 0) {player.velY = -physics.maxGravity;}}
-
+    if (Math.abs(player.velY) > physics.maxGravity) {
+      if (player.vely > 0) {player.velY = physics.maxGravity;} else if (player.vely < 0) {player.velY = -physics.maxGravity;}
+    }
     if (!keys.rtArrow && !keys.ltArrow) {player.velX *= physics.friction;}
     if (keys.rtArrow) {player.velX += physics.movementSpeed;}
     if (keys.ltArrow) {player.velX -= physics.movementSpeed;}
-    if (Math.abs(player.velX) > physics.maxMovementSpeed) {if (player.velX > 0) {player.velX = physics.maxMovementSpeed;} else {player.velX = -physics.maxMovementSpeed;}}
+    if (Math.abs(player.velX) > physics.maxMovementSpeed) {
+      if (player.velX > 0) {player.velX = physics.maxMovementSpeed;} else {player.velX = -physics.maxMovementSpeed;}
+    }
     player.x += player.velX;
     if (colliding()) {
     while (colliding()) {if (player.velX > 0) {player.x -= 0.1} else if (player.velX < 0) {player.x += 0.1}}
     player.velX = 0;
     }
-
   }
 
   function clear(clr) {
@@ -197,8 +171,7 @@ function mainLoop() {
       );
     }
     ctx.fillStyle = 'rgb(0, 0, 255)';
-    //ctx.fillRect(canvas.width / 2 - 15, canvas.height / 2 - 25, 40, 40);
-	if (player.spriteSheet.complete) {ctx.drawImage(player.spriteSheet, 0, 0, 35, 26, canvas.width / 2 - 15, canvas.height / 2 - 25, 40, 40);}
+    ctx.drawImage(player.spriteSheet, 0, 0, 35, 26, canvas.width / 2 - 15, canvas.height / 2 - 25, 40, 40);
     ctx.restore();
   }
   update();
