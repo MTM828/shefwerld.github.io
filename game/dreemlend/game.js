@@ -171,7 +171,7 @@ function mainLoop() {
       );
     }
     ctx.fillStyle = 'rgb(0, 0, 255)';
-    ctx.drawImage(spriteSheets.player, plplayer.frame * 40, 0, 40, 40, canvas.width / 2 - 20, canvas.height / 2 - 20, 40, 40);
+    ctx.drawImage(spriteSheets.player, player.frame * 40, 0, 40, 40, canvas.width / 2 - 20, canvas.height / 2 - 20, 40, 40);
     ctx.restore();
   }
   update();
