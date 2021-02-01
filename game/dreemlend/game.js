@@ -8,6 +8,7 @@ window.onload = function() {
 }
 const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
+ctx.imageSmoothingQuality = "low";
 
 var i;
 var j;
@@ -143,6 +144,7 @@ function mainLoop() {
     while (colliding()) {if (player.velX > 0) {player.x -= 0.1} else if (player.velX < 0) {player.x += 0.1}}
     player.velX = 0;
     }
+    if (player.frame = 3) {player.frame += 0.001} else {player.frame = 0}
   }
 
   function clear(clr) {
@@ -171,7 +173,7 @@ function mainLoop() {
       );
     }
     ctx.fillStyle = 'rgb(0, 0, 255)';
-    ctx.drawImage(spriteSheets.player, (player.frame + 40) * (40 - 40), 0, 40, 40, canvas.width / 2 - 20, canvas.height / 2 - 20, 40, 40);
+    ctx.drawImage(spriteSheets.player, ((Math.floor(player.frame) + 40) * (40)) - 40, 0, 40, 40, canvas.width / 2 - 20, canvas.height / 2 - 20, 40, 40);
     ctx.restore();
   }
   update();
