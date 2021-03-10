@@ -48,7 +48,7 @@ const spriteSheets = {
   enemies: new Image(),
 }
 spriteSheets.tiles.src   = './tileSpriteSheet.png';
-spriteSheets.player.src  = 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/18affa5e-b74d-4ebd-8a9c-2b92aae3eaea/d8v9s6p-29f6bf4e-cd42-46ea-b0b1-00571f3fb92e.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwic3ViIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsImF1ZCI6WyJ1cm46c2VydmljZTpmaWxlLmRvd25sb2FkIl0sIm9iaiI6W1t7InBhdGgiOiIvZi8xOGFmZmE1ZS1iNzRkLTRlYmQtOGE5Yy0yYjkyYWFlM2VhZWEvZDh2OXM2cC0yOWY2YmY0ZS1jZDQyLTQ2ZWEtYjBiMS0wMDU3MWYzZmI5MmUucG5nIn1dXX0.M7ibeo2hPSO-Q86mrOJ76W0PRHPV3bT6fPuE1K7LHnY';
+spriteSheets.player.src  = './playerSpriteSheet.png';
 spriteSheets.objects.src = './objectSpriteSheet.png';
 spriteSheets.enemies.src = './enemySpriteSheet.png';
 
