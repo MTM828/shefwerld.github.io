@@ -2,13 +2,14 @@
     --white: #FFF;
     --highlight: #f54260;
     --black: #1C1C1C;
+    --body: #333;
 }
 *   {
     font-family: "Roboto";
     font-weight: 700;
 }
 body    {
-    background-color: #333;
+    background-color: var(--body);
     margin: 0;
 }
 .userbox {
@@ -16,7 +17,7 @@ body    {
     display: flex;
     justify-content: space-between;
 }
-#container, #heading, #top_text  {
+.container, #heading, #top_text  {
     margin: auto;
     width: 90%;
 }
@@ -42,6 +43,18 @@ body    {
 }
 .username, #top_text, #top_text_2, .graphtitletext   {
     font-size: 20px;
+    color: var(--highlight);
+    text-decoration: none;
+}
+.graphtitletext {
+    font-size: 28px;
+    color: var(--white);
+}
+.downloadlink   {
+    display: flex;
+    justify-content: center;
+}
+.downloadlink a {
     color: var(--highlight);
     text-decoration: none;
 }
@@ -93,18 +106,10 @@ form    {
     margin-bottom: 10px;
 }
 #overview   {
-    display: flex;
     flex-direction: row;
     margin-bottom: 0;
-    padding: 25px 0 5px 0;
-    border-top: 1px solid var(--white);
-}
-#dateinformation   {
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 25px;
-    padding: 5px 0 25px 0;
-    border-bottom: 1px solid var(--white);
+    padding: 25px 0 25px 0;
+    background-color: var(--black);
 }
 #overview img   {
     width: 150px;
@@ -173,6 +178,13 @@ input[type=text]    {
     color: var(--white);
     border: 0;
 }
+button  {
+    height: 3em;
+    padding: 8px;
+    background-color: var(--black);
+    color: var(--white);
+    border: 0;
+}
 input[type=submit]  {
     width: 10%;
     background-color: var(--black);
@@ -186,4 +198,13 @@ input[type=submit]  {
     color: var(--white);
     font-size: 48px;
     justify-content: center;
+}
+#historySlider  {
+    width: 90%;
+    display: flex;
+    justify-content: center;
+}
+#information-display    {
+    display: flex;
+    justify-content: space-between;
 }

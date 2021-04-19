@@ -1,351 +1,369 @@
-var begin = true;
-while (!begin) {}
+"use strict";
 
-window.onload = function() {
-    setTimeout(mainLoop, 0);
-};
-const canvas = document.querySelector('#canvas');
-const ctx = canvas.getContext('2d');
-
-var i;
-var j;
-var k;
-
-var currentTime;
-var elapsedTime;
-var oldTime;
-var frameCount = 0;
-var fps = 60;
-var frameDelay = 1000/fps;
-
-function col(x1, y1, w1, h1, x2, y2, w2, h2) {
-    return ((x1 + w1 > x2) && (x1 < x2 + w2)) && ((y1 + h1 > y2) && (y1 < y2 + h2));
+var i; var j;
+function log(str = "") {
+    console.log(str);
 }
-function colliding() {
-    var returnVal = false;
-    for (i=0; i<platforms.length; i++) {
-        if (col(
-                player.x - 20,
-                player.y + 20,
-                40, 40,
-                platforms[i].x - platforms[i].width + 25,
-                platforms[i].y - platforms[i].height * 0.5,
-                platforms[i].width, platforms[i].height
-            )) {
-            returnVal = true;
-        }
-    }
-    return returnVal;
+function rgb(r, g, b) {
+    return "rgb(" + r + ", " + g + ", " + b + ")";
 }
-function enmCol(index) {
-	for (j=0; j<platforms.length; j++) {
-		if (col(
-		    -enemies[index].x,
-			enemies[index].y,
-			35,
-			35,
-			platforms[j].x,
-			platforms[j].y,
-			platforms[j].width,
-			platforms[j].height
-		)) {return true;}
-	}
-	return false;
-}
-
 const spriteSheet = new Image();
-spriteSheet.src = './SpriteSheet.png';
+spriteSheet.src = "./spritesheet.png";
 
-var player = {
-    x: 0,
-    y: 0,
-    velX: 0,
-    velY: 0,
-    frame: 0,
-	reload: 0,
-	reloadPeriod: 75
-};
-var physics = {
-    jumpHeight: 12,
-    gravity: 0.3,
-    maxGravity: 25,
-    movementSpeed: 0.3,
-    friction: 0.9,
-    maxMovementSpeed: 5,
-};
-var platforms = [
-    {type: 'ground',   x: 0,   y: 100, width: 500,  height: 50},
-    {type: 'ground',   x: 0,   y: 300, width: 500,  height: 50},
-    {type: 'obstacle', x: 0,   y: 500, width: 500,  height: 50},
-    {type: 'ground',   x: 250, y: 700, width: 1000, height: 50},
-    {type: 'ground',   x: 450, y: 500, width: 50,   height: 50},
-    {type: 'ground',   x: 250, y: 300, width: 50,   height: 50}
-];
-var projectiles = [];
-var enemies = [
-    {
-	    x: -400,
-		y: 0,
-		dir: 1,
-		type: 1
-	}
+const g = "grass";
+const s = "stone";
+const X = "ground moving x-axis";
+const Y = "ground moving y-axis";
+const Z = "ground moving x+y-axis";
+const _ = "air";
+var lvl = [
+    [_, g, _, g, _, X, _, g, _, _, _],
+    [g, g, _, _, _, _, _, _, _, _, _],
+    [_, g, _, g, g, g, _, g, _, Y, _],
+    [g, g, _, _, _, g, _, _, _, _, _],
+    [_, _, _, _, _, g, _, _, _, _, g],
+    [g, g, _, _, _, _, _, _, _, g, g],
+    [g, g, g, g, g, g, g, g, g, g, g]
 ];
 
-var keys = {
-    w: false,
-    a: false,
-    s: false,
-    d: false,
-    rtArrow: false,
-    ltArrow: false,
-    upArrow: false,
-    dnArrow: false,
-    space: false
-};
-var mouse = {
-    down: false,
-    x: 0,
-    y: 0
-};
-function onKeyDown(event) {
-    var keyCode = event.which;
-    if (keyCode == 87) {
-        keys.w = true;
-    }
-    if (keyCode == 83) {
-        keys.s = true;
-    }
-    if (keyCode == 65) {
-        keys.a = true;
-    }
-    if (keyCode == 68) {
-        keys.d = true;
-    }
-    if (keyCode == 38) {
-        keys.upArrow = true;
-    }
-    if (keyCode == 40) {
-        keys.dnArrow = true;
-    }
-    if (keyCode == 37) {
-        keys.ltArrow = true;
-    }
-    if (keyCode == 39) {
-        keys.rtArrow = true;
-    }
-    if (keyCode == 32) {
-        keys.space = true;
-    }
-}
-function onKeyUp(event) {
-    var keyCode = event.which;
-    if (keyCode == 87) {
-        keys.w = false;
-    }
-    if (keyCode == 83) {
-        keys.s = false;
-    }
-    if (keyCode == 65) {
-        keys.a = false;
-    }
-    if (keyCode == 68) {
-        keys.d = false;
-    }
-    if (keyCode == 38) {
-        keys.upArrow = false;
-    }
-    if (keyCode == 40) {
-        keys.dnArrow = false;
-    }
-    if (keyCode == 37) {
-        keys.ltArrow = false;
-    }
-    if (keyCode == 39) {
-        keys.rtArrow = false;
-    }
-    if (keyCode == 32) {
-        keys.space = false;
-    }
-}
-function onMouseMove(event) {
-    mouse.x = event.offsetX;
-    mouse.y = event.offsetY;
-}
-document.addEventListener("keydown", onKeyDown, false);
-document.addEventListener("keyup", onKeyUp, false);
-document.addEventListener("mousemove", onMouseMove, false);
-document.addEventListener("mouseup", function(){mouse.down=false;}, false);
-document.addEventListener("mousedown", function(){mouse.down=true;}, false);
+class Canvas {
+    constructor() {
+        this.src = document.querySelector("#canvas");
 
-oldTime = window.performance.now();
-function mainLoop() {
-    currentTime = window.performance.now();
-    elapsedTime = currentTime - oldTime;
-    requestAnimationFrame(mainLoop);
-    while (!elapsedTime > frameDelay) {}
-    oldTime = currentTime;
+        this.fps = 60;
+        this.currentTime;
+        this.elapsedTime;
+        this.oldTime;
+        this.frameDelay = 1000/this.fps;
 
-    function update() {
-        player.y += player.velY;
-        player.velY += physics.gravity;
-        if (colliding()) {
-            while (colliding()) {
-                if (player.velY > 0) {
-                    player.y -= 0.1;
-                } else if (player.velY < 0) {
-                    player.y += 0.1;
+        this.quit = false;
+    }
+    mainLoop() {
+        canvas.currentTime = window.performance.now();
+        canvas.elapsedTime = canvas.currentTime - canvas.oldTime;
+        if (!canvas.quit) {requestAnimationFrame(canvas.mainLoop);}
+        while (!canvas.elapsedTime > canvas.frameDelay) {}
+        canvas.oldTime = canvas.currentTime;
+
+        platforms.update();
+        player.update();
+        projectiles.update();
+
+        renderer.render();
+    }
+};
+class Renderer {
+    constructor() {
+        this.ctx = canvas.src.getContext("2d");
+    }
+    render() {
+        this.clear(rgb(0, 0, 255));
+        platforms.render();
+        projectiles.render();
+        enemies.render();
+        player.render();
+    }
+    setColour(colour) {
+        this.ctx.fillStyle = colour;
+    }
+    drawRect(x, y, width, height, colour) {
+        this.ctx.save();
+        this.setColour(colour);
+        this.ctx.fillRect(Math.floor(x), Math.floor(y), width, height);
+        this.ctx.restore();
+    }
+    drawImage(imgSrc, startX, startY, endX, endY, rendX, rendY, rendWidth, rendHeight) {
+        this.ctx.drawImage(
+            imgSrc, startX, startY, endX, endY, Math.floor(rendX), Math.floor(rendY), rendWidth, rendHeight
+        )
+    }
+    renderFrame(index, row, width, height, rendX, rendY, rendWidth, rendHeight) {
+        this.drawImage(
+            spriteSheet, index * width, row * height, index * width + width, row * height + height, rendX, rendY, rendWidth, rendHeight
+        )
+    }
+    clear(colour) {
+        this.ctx.save();
+        this.setColour(colour);
+        this.drawRect(0, 0, canvas.src.width, canvas.src.height, colour);
+        this.ctx.restore();
+    }
+};
+class Keys {
+    constructor() {
+        this.w = false;
+        this.a = false;
+        this.s = false;
+        this.d = false;
+        this.up    = false;
+        this.down  = false;
+        this.left  = false;
+        this.right = false;
+        this.space = false;
+    }
+};
+class Physics {
+    constructor() {
+        this.gravity = 0.2;
+        this.jumpHeight = -8;
+        this.acceleration = 1;
+        this.maxSpeed = 8;
+        this.friction = 0.8;
+    }
+    rectCol(x1, y1, w1, h1, x2, y2, w2, h2) {
+        return x1 + w1 > x2 && x1 < x2 + w2 && y1 + h1 > y2 && y1 < y2 + h2;
+    }
+};
+class Player {
+    constructor(xInit = 0, yInit = 0) {
+        this.xInit = xInit;
+        this.yInit = yInit;
+        this.x = xInit;
+        this.y = yInit;
+        this.yVel = 0;
+        this.xVel = 0;
+        this.onGround = false;
+        this.width  = 50;
+        this.height = 50;
+        this.frame = 0;
+    }
+    colliding(getTile = false) {
+        for (i = 0; i < platforms.platforms.length; i++) {
+            if (physics.rectCol(
+                this.x, this.y, this.width, this.height, platforms.platforms[i].x, platforms.platforms[i].y, platforms.width, platforms.height
+            )) {
+                if (getTile) {return i;} else {return true;}
+            }
+        }
+        return false;
+    }
+    die() {
+        this.x = this.xInit;
+        this.y = this.yInit;
+    }
+    update() {
+        this.yVel += physics.gravity;
+        this.y += this.yVel;
+        if (this.colliding()) {
+            if (this.yVel < 0) {
+                while (this.colliding()) {this.y += physics.gravity;}
+            } else if (this.yVel > 0) {
+                this.onGround = this.colliding(true);
+                while (this.colliding()) {this.y -= physics.gravity;}
+            }
+            if (keys.up && this.yVel > 0) {
+                this.yVel = physics.jumpHeight;
+                this.onGround = false;
+            } else {
+                this.yVel = 0;
+            }
+        } else {
+            this.onGround = false;
+        }
+
+        this.xVel *= physics.friction;
+        if (keys.right && Math.abs(this.xVel) < physics.maxSpeed) {this.xVel += physics.acceleration;}
+        if (keys.left  && Math.abs(this.xVel) < physics.maxSpeed) {this.xVel -= physics.acceleration;}
+        this.xVel = Math.round(this.xVel * 1000) / 1000;
+        this.x += this.xVel;
+        if (this.colliding()) {
+            if (this.xVel > 0) {
+                while (this.colliding()) {this.x -= 0.1;}
+            } else if (this.xVel < 0) {
+                while (this.colliding()) {this.x += 0.1;}
+            }
+            this.xVel = 0;
+        }
+    }
+    render() {
+        renderer.renderFrame(this.frame, 0, 40, 40, canvas.src.width/2 - this.width/2, canvas.src.height/2 - this.height/2, this.width, this.height);
+    }
+};
+class Enemies {
+    constructor() {
+        this.enemies = [];
+    }
+    update() {}
+    render() {}
+};
+class Projectiles {
+    constructor() {}
+    update() {}
+    render() {}
+};
+class Platform {
+    constructor(x, y, type, xMotion = 0, yMotion = 0, motionVel = 0) {
+        this.xInit = x;
+        this.yInit = y;
+        this.x = x;
+        this.y = y;
+        this.type = type;
+        this.xMotion = xMotion;
+        this.yMotion = yMotion;
+        this.motionVel = motionVel;
+    }
+};
+class Platforms {
+    constructor() {
+        this.level = lvl;
+        this.platforms = [];
+        this.width  = 75;
+        this.height = 75;
+    }
+    init() {
+        for (i = 0; i < this.level.length; i++) {
+            for (j = 0; j < this.level[i].length; j++) {
+                switch (this.level[i][j]) {
+                    case _: break;
+                    case g: this.platforms.push(new Platform(j * this.width, i * this.height, g           )); break;
+                    case s: this.platforms.push(new Platform(j * this.width, i * this.height, s           )); break;
+                    case X: this.platforms.push(new Platform(j * this.width, i * this.height, g, 75, 0 , 1)); break;
+                    case Y: this.platforms.push(new Platform(j * this.width, i * this.height, g, 0 , 75, 1)); break;
+                    case Z: this.platforms.push(new Platform(j * this.width, i * this.height, g, 75, 75, 1)); break;
                 }
             }
-            if (keys.upArrow && player.velY > 0) {
-                player.velY = -physics.jumpHeight;
-            } else {
-                player.velY = 0;
-            }
         }
-        if (Math.abs(player.velY) > physics.maxGravity) {
-            if (player.vely > 0) {
-                player.velY = physics.maxGravity;
-            } else if (player.vely < 0) {
-                player.velY = -physics.maxGravity;
-            }
-        }
-        if (!keys.rtArrow && !keys.ltArrow) {
-            player.velX *= physics.friction;
-        }
-        if (keys.rtArrow) {
-            player.velX += physics.movementSpeed;
-        }
-        if (keys.ltArrow) {
-            player.velX -= physics.movementSpeed;
-        }
-        if (Math.abs(player.velX) > physics.maxMovementSpeed) {
-            if (player.velX > 0) {
-                player.velX = physics.maxMovementSpeed;
-            } else {
-                player.velX = -physics.maxMovementSpeed;
-            }
-        }
-        player.x += player.velX;
-        if (colliding()) {
-            while (colliding()) {
-                if (player.velX > 0) {
-                    player.x -= 0.1;
-                } else if (player.velX < 0) {
-                    player.x += 0.1;
+    }
+    update() {
+        var platform;
+        for (i = 0; i < this.platforms.length; i++) {
+            platform = this.platforms[i];
+            if (platform.xMotion != 0) {
+                if (platform.motionVel > 0) {
+                    if (platform.x < platform.xInit + platform.xMotion) {
+                        platform.x += platform.motionVel;
+                        if (player.onGround == i) {
+                            player.x += platform.motionVel;
+                            if (player.colliding()) {while (player.colliding()) {player.x -= 0.1;}}
+                        }
+                        if (player.colliding()) {
+                            player.x += platform.motionVel;
+                            if (player.colliding()) {player.die();}
+                        }
+                    } else {
+                        platform.motionVel *= -1;
+                        while (platform.x < platform.xInit + platform.xMotion) {
+                            platform.x += 0.1;
+                            if (player.onGround) {
+                                player.x += 0.1;
+                            }
+                        }
+                    }
+                } else if (platform.motionVel < 0) {
+                    if (platform.x > platform.xInit - platform.xMotion) {
+                        platform.x += platform.motionVel;
+                        if (player.onGround == i) {
+                            player.x += platform.motionVel;
+                            if (player.colliding()) {while (player.colliding()) {player.x -= 0.1;}}
+                        }
+                        if (player.colliding()) {
+                            player.x += platform.motionVel;
+                            if (player.colliding()) {player.die();}
+                        }
+                    } else {
+                        platform.motionVel *= -1;
+                        while (platform.x > platform.xInit + platform.xMotion) {
+                            platform.x -= 0.1;
+                            if (player.onGround) {
+                                player.x -= 0.1;
+                            }
+                        }
+                    }
                 }
             }
-            player.velX = 0;
-        }
-
-		player.frame += 1;
-        // if (player.frame > 5 - 1) {player.frame = 0;}
-
-        if (player.reload < player.reloadPeriod) {player.reload += 1;}
-        if (mouse.down && player.reload >= player.reloadPeriod) {
-			player.reload = 0;
-			projectiles.push({
-				x: player.x - 20 + canvas.width/2,
-				y: player.y - 20 + canvas.height/2,
-				vel: 10,
-				dir: Math.atan2(mouse.y - canvas.height/2, mouse.x - canvas.width/2)
-			});
-		}
-		for (i=0; i<projectiles.length; i++) {
-			projectiles[i].x += Math.cos(projectiles[i].dir) * projectiles[i].vel;
-			projectiles[i].y += Math.sin(projectiles[i].dir) * projectiles[i].vel;
-		}
-
-        for (i=0; i<enemies.length; i++) {
-			while (!enmCol(i)) {enemies[i].y += 1;}
-
-			enemies[i].x += enemies[i].dir;
-			if (!enmCol(i)) {enemies[i].x -= 1; enemies[i].dir *= -1}
-
-			if (enmCol(i)) {enemies[i].y -= 1;}
-		}
-    }
-
-    function clear(clr) {
-        ctx.save();
-        ctx.fillStyle = clr;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.restore();
-    }
-    function render() {
-        clear('rgb(135, 206, 235)');
-        for (i=0; i<platforms.length; i++) {
-            switch (platforms[i].type) {
-                case 'ground':
-                    ctx.fillStyle = 'rgb(0, 179, 44)';
-                    break;
-                case 'obstacle':
-                    ctx.fillStyle = 'rgb(179, 0, 12)';
-                    break;
+            if (platform.yMotion != 0) {
+                if (platform.motionVel > 0) {
+                    if (platform.y < platform.yInit + platform.yMotion) {
+                        platform.y += platform.motionVel;
+                        if (player.onGround == i) {
+                            player.y += platform.motionVel;
+                            if (player.colliding()) {while (player.colliding()) {player.y -= 0.1;}}
+                        }
+                        if (player.colliding()) {
+                            player.y += platform.motionVel;
+                            if (player.colliding()) {player.die();}
+                        }
+                    } else {
+                        platform.motionVel *= -1;
+                        while (platform.y < platform.yInit + platform.yMotion) {
+                            platform.y += 0.1;
+                            if (player.onGround) {
+                                player.y += 0.1;
+                            }
+                        }
+                    }
+                } else if (platform.motionVel < 0) {
+                    if (platform.y > platform.yInit - platform.yMotion) {
+                        platform.y += platform.motionVel;
+                        if (player.onGround == i) {
+                            player.y += platform.motionVel;
+                            if (player.colliding()) {while (player.colliding()) {player.y -= 0.1;}}
+                        }
+                        if (player.colliding()) {
+                            player.y += platform.motionVel;
+                            if (player.colliding()) {player.die();}
+                        }
+                    } else {
+                        platform.motionVel *= -1;
+                        while (platform.y > platform.yInit + platform.yMotion) {
+                            platform.y -= 0.1;
+                            if (player.onGround) {
+                                player.y -= 0.1;
+                            }
+                        }
+                    }
+                }
             }
-            ctx.fillRect(
-                platforms[i].x + 30 - platforms[i].width  + canvas.width/2  - player.x,
-                platforms[i].y - 20 - platforms[i].height + canvas.height/2 - player.y,
-                platforms[i].width,
-                platforms[i].height
+        }
+        platform = null;
+    }
+    render() {
+        for (i = 0; i < this.platforms.length; i++) {
+            renderer.drawRect(
+                this.platforms[i].x - player.x + (canvas.src.width /2 - player.width /2),
+                this.platforms[i].y - player.y + (canvas.src.height/2 - player.height/2),
+                this.width, this.height,
+                rgb(0, 255, 0)
             );
         }
-		for (i=0; i<enemies.length; i++) {
-			switch (enemies[i].type) {
-				case 1:
-                    ctx.drawImage(
-	        	        spriteSheet,
-        		    	0,
-    			        40,
-		        	    40,
-	    	        	40,
-    		        	enemies[i].x - player.x - 15 + canvas.width/2,
-		            	enemies[i].y - player.y - 70 + canvas.height/2,
-	    		        35,
-    			        35
-		            );
-					break;
-				case 2:
-                    ctx.drawImage(
-	        	        spriteSheet,
-        		    	0,
-    			        80,
-		        	    40,
-	    	        	40,
-    		        	enemies[i].x - player.x - 15 + canvas.width/2,
-		            	enemies[i].y - player.y - 70 + canvas.height/2,
-	    		        35,
-    			        35
-		            );
-					break;
-			}
-		}
-		for (i=0; i < projectiles.length; i++) {
-		   	ctx.drawImage(
-	    	    spriteSheet,
-    			0,
-			    120,
-		    	40,
-	    		40,
-    			projectiles[i].x - player.x,
-		    	projectiles[i].y - player.y,
-			    40,
-			    40
-		    );
-		}
-        ctx.drawImage(
-            spriteSheet,
-            player.frame * 40,
-			0,
-            40,
-            40,
-            canvas.width / 2 - 15,
-            canvas.height / 2 - 20,
-            35,
-            35
-        );
     }
+};
 
-    update();
-    render();
-	frameCount += 1;
+const canvas      = new Canvas();
+const renderer    = new Renderer();
+const keys        = new Keys();
+const physics     = new Physics();
+const platforms   = new Platforms();
+const projectiles = new Projectiles();
+const enemies     = new Enemies();
+const player      = new Player(150, 75);
+platforms.init();
+
+function onKeyUp(event) {
+    switch (event.which) {
+        case 87: keys.w     = false; break;
+        case 83: keys.s     = false; break;
+        case 65: keys.a     = false; break;
+        case 68: keys.d     = false; break;
+        case 38: keys.up    = false; break;
+        case 40: keys.down  = false; break;
+        case 37: keys.left  = false; break;
+        case 39: keys.right = false; break;
+        case 32: keys.space = false; break;
+    }
 }
+function onKeyDown(event) {
+    switch (event.which) {
+        case 87: keys.w     = true; break;
+        case 83: keys.s     = true; break;
+        case 65: keys.a     = true; break;
+        case 68: keys.d     = true; break;
+        case 38: keys.up    = true; break;
+        case 40: keys.down  = true; break;
+        case 37: keys.left  = true; break;
+        case 39: keys.right = true; break;
+        case 32: keys.space = true; break;
+    }
+}
+document.addEventListener("keyup"  , onKeyUp  , false);
+document.addEventListener("keydown", onKeyDown, false);

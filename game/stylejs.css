@@ -1,0 +1,19 @@
+body {
+    padding: 0px;
+    margin: 0px;
+}
+.thumbnail {
+    position: absolute;
+}
+.startbutton {
+    position: absolute;
+    background-color: #2e0e45;
+    color: #FFFFFF;
+    font-weight: bolder;
+    font-family: 'Comic Sans MS';
+    padding: 10px;
+    font-size: 30px;
+    outline: none;
+    border-radius: 0px;
+    border: none;
+}
