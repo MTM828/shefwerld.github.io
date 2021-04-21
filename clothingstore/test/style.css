@@ -1,0 +1,92 @@
+body {
+    height: 100%;
+    margin: 0px;
+    background-color: #111;
+    color: #EEE;
+    font-family: 'Roboto Mono', monospace;
+}
+.container {
+    width: 95%;
+    margin: auto;
+}
+.centered {
+    text-align: center;
+}
+
+#orderdialog {
+    top: 10%;
+    bottom: 30%;
+    left: 15%;
+    right: 15%;
+    background-color: #111;
+    position: fixed;
+    display: flex;
+}
+.dialogupperdiv {
+    display: flex;
+}
+.dialogupperdiv, .dialoglowerdiv {
+    padding: 5%;
+    height: 30%;
+}
+#orderimg {
+    width: 200px;
+    height: 200px;
+}
+.orderdesc {
+    top: 10%;
+    left: 10%;
+}
+
+.listtitle {
+    font-weight: bolder;
+    font-size: 300%;
+}
+.productlist {
+    margin: auto;
+    width: 70%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: stretch;
+}
+.product {
+    width: 50%;
+    margin: auto;
+    padding-bottom: 20px;
+}
+.img {
+    margin: auto;
+    width: 75%;
+    height: 75%;
+}
+.name {
+    padding-top: 10px;
+    margin: auto;
+    font-weight: lighter;
+    font-size: 150%;
+}
+
+.comingsoon {
+    font-size: 150%;
+}
+img, #orderdialog {
+    border: 2px solid #FFFFFF;
+}
+:is(img, #orderdialog):hover {
+    border: 2px solid #CCCCCC;
+}
+.orderquantity {
+    background-color: #000000;
+}
+@keyframes blinking-cursor {
+    0% {opacity: 1;}
+    50% {opacity: 1;}
+    51% {opacity: 0;}
+    100% {opacity: 0;}
+}
+@keyframes blinking-border {
+    0% {border: 2px solid #EEEEEE;}
+    50% {border: 2px solid #EEEEEE;}
+    51% {border: 2px solid rgba(0, 0, 0, 0);}
+    100% {border: 2px solid rgba(0, 0, 0, 0);}
+}

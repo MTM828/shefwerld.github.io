@@ -1,0 +1,53 @@
+body    {
+    background-color: #241f29;
+}
+.container, .footer  {
+    width: 90%;
+    margin: auto;
+    background-color: #2e0e45;
+    padding: 8px;
+}
+*   {
+    font-family: "Comic Sans MS", 'Comic Sans', sans-serif;
+    color: #FFF;
+}
+.centertext {
+    text-align: center;
+}
+#flex   {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-between;
+}
+#flexcenter {
+    margin: auto;
+    width: 80%;
+}
+.flexitem   {
+    border: 2px solid #FFFFFF;
+    background-color: #000000;
+    border-radius: 2px;
+    margin: 10px 0 10px 0;
+    padding: 12px;
+    display: flex;
+    flex-wrap: wrap;
+}
+#small {
+    flex-shrink: 20;
+}
+#large {
+    flex-grow: 2;
+}
+img, #inlinetext    {
+    display: inline;
+    align-self: flex-end;
+}
+#inlinetext {
+    width: 50%;
+    margin: 0 0 0 10px;
+    align-self: center;
+} 
+#gameplatform   {
+    width: 40%;
+}

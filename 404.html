@@ -7,65 +7,22 @@
         ---
         -->
         <title>Shef Werld - 404</title>
-        <link href="fontawesome/css/all.css" rel="stylesheet">
         <link rel="shortcut icon" href="shefnews/kerb.ico" type="image/x-icon">
+        <link href="fontawesome/css/all.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i&amp;display=swap" rel="stylesheet">
-        <style>
-            body    {
-                background-color: #1A1A1A;
-                color: #FCFCFC;
-            }
-            h1,a  {
-                font-family: 'Comic Sans MS', 'Comic Sans', sans-serif;
-            }
-            *       {
-                font-family: 'Lato', 'Arial', sans-serif;
-            }
-            #container  {
-                width: 80%;
-                margin: auto;
-            }
-            li  {
-                list-style: none;
-                margin: 0 0 0 10px;
-            }
-            #site   {
-                margin: 5px 0 0 0;
-            }
-            #maintenance    {
-                font-style: italic;
-            }
-            #shefwerldlogo  {
-                color: #FF9999; text-decoration: none; transition: 0.25s color;
-            }
-            #shefwerldlogo:hover    {
-                color: #8800cc;
-            }
-            button  {
-                border-radius: 0px;
-                outline: none;
-                border: 1px solid #FCFCFC;
-                color: #FCFCFC;
-                background-color: #1A1A1A;
-                height: 24px;
-                width: 80px;
-                font-size: 16px;
-            }
-            button:focus    {
-                background-color: #FCFCFC;
-                color: #1A1A1A;
-            }
-        </style>
+        <link href="./style.css" rel="stylesheet">
     </head>
     <body>
         <div id="container">
             <h1><a id="shefwerldlogo" href="https://shefwerld.github.io">Shef Werld</a> </li></h1>
             <h2>HTTP - 404</h2>
-            <span>Yeah, if you've seen this, something's gone wrong.</span><br>
-            <span>Either the URL accessed was due to you typing it in wrong or because there's a mistake in the website somewhere.</span><br>
-            <span>If it is the latter, tell me. Or not, your choice. I'm going to probably make a better 404 page anyway.</span><br><br>
-            <button onclick="back();">Go Back</button><br><br>
-            <script>function back(){window.history.back();}</script>
+            <p>
+                Yeah, if you've seen this, something's gone wrong.<br>
+                Either the URL accessed was due to you typing it in wrong or because there's a mistake in the website somewhere.<br>
+                If it is the latter, tell me. Or not, your choice. I'm going to probably make a better 404 page anyway.<br>
+            </p>
+            <br>
+            <button onclick="window.history.back();">Go Back</button>
         </div>
     </body>
 </html>

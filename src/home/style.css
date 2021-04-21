@@ -1,0 +1,87 @@
+body {
+    background-color: #1A1A1A;
+    font-family: "Lato", 'Arial', sans-serif;
+    overflow-x: hidden;
+    color: #E4E4E4;
+}
+.container {
+    width: 90%;
+    display: block;
+    margin: auto;
+    text-align: center;
+}
+
+.disclaimer {
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    font-size: 12px;
+}
+.shefwerldlogo {
+    color: #FF9999;
+    text-decoration: none;
+    transition: color 0.25s;
+    font-weight: bold;font-family: "Comic Sans MS", 'Comic Sans', sans-serif
+}
+
+a {
+    color: #9999DD;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 700;
+    transition: color 0.25s;
+}
+a:hover {
+    color: #8800cc;
+}
+li {
+    display: inline-block;
+    margin: 0 15px 0 15px;
+}
+
+nav, footer {
+    background-color: #252525;
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    padding: 4px 0 4px 0;
+}
+:is(nav, footer) li {
+    font-family: 'Comic Sans MS';
+}
+
+.mural {
+    background-color: #FFFFFF;
+    width: 80%;
+    margin: auto;
+}
+
+
+.information {
+    width: 100%;
+    background-color: #252525;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    padding: 10px 0 10px 0;
+}
+#name {
+    margin: 20px 20px 0 20px;
+    font-size: 26px;
+    font-weight: bold;
+    font-style: italic;
+}
+
+#character_description {
+    flex-basis: 75%;
+    margin: 20px 20px 0 20px;
+    font-size: 18px;
+}
+
+#shefwerldnews {
+    font-style: italic;
+    margin: auto;
+    width: 100%;
+    color: #E4E4E4;
+    text-align: center;
+}

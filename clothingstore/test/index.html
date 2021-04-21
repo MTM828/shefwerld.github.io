@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Shef Kerbi's Apparel</title>
+        <link href="https://fonts.googleapis.com/css?family=Arvo:400,700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i,900,900i&display=swap&subset=cyrillic" rel="stylesheet">
+        <link href="./style.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="container">
+            <h1>SKA</h1>
+            <p>(Shef Kerbi's Apparel)</p>
+        </div>
+        <div class="container centered">
+            <br>
+            <br>
+            <h2 class="listtitle centered">Product List</h2>
+            <div class="productlist centered">
+
+                <div class="product" onclick="beginOrder(1);">
+                    <img class="img" src="../products/ska/product1.jpg" alt="Product image">
+                    <p class="name">Authentic Pig Soop Provider</p>
+                </div>
+
+                <div class="product" onclick="beginOrder(2);">
+                    <img class="img" src="../products/ska/product2.jpg" alt="Product image">
+                    <p class="name">Ghost Hobo Beanie</p>
+                </div>
+
+                <div class="product" onclick="beginOrder(3);">
+                    <img class="img" src="../products/ska/product3.jpg" alt="Product image">
+                    <p class="name">Shef Kerbi Hat</p>
+                </div>
+
+                <div class="product" onclick="beginOrder(4);">
+                    <img class="img" src="../products/ska/product4.jpg" alt="Product image">
+                    <p class="name">Your Local Russian Trashdonalds</p>
+                </div>
+
+                <div class="product" onclick="beginOrder(5);">
+                    <img class="img" src="../products/ska/product5.jpg" alt="Product image">
+                    <p class="name">Soulja Boi (No Loop)</p>
+                </div>
+
+            </div>
+            <br>
+            <span class="comingsoon">More products coming soon...</span>
+        </div>
+        <div id="orderdialog" style="display: none;">
+            <div class="dialogupperdiv">
+                <input type="number" class="itemquantity" placeholder="QTY">
+                <button id="orderbutton" onclick="finishOrder();">Order</button>
+            </div>
+            <div class="dialoglowerdiv">
+                <img id="orderimg">
+                <span class="orderdesc">...</span>
+            </div>
+        </div>
+        <script src="./script.js"></script>
+    </body>
+</html>

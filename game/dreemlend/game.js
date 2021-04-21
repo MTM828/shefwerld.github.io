@@ -12,15 +12,15 @@ spriteSheet.src = "./spritesheet.png";
 
 const g = "grass";
 const s = "stone";
-const X = "ground moving x-axis";
-const Y = "ground moving y-axis";
-const Z = "ground moving x+y-axis";
+const X = "ground with moving x-axis";
+const Y = "ground with moving y-axis";
+const Z = "ground with moving x+y-axis";
 const _ = "air";
 var lvl = [
-    [_, g, _, g, _, X, _, g, _, _, _],
-    [g, g, _, _, _, _, _, _, _, _, _],
-    [_, g, _, g, g, g, _, g, _, Y, _],
-    [g, g, _, _, _, g, _, _, _, _, _],
+    [g, _, _, g, _, X, _, g, _, _, _],
+    [g, _, _, _, _, _, _, _, _, _, _],
+    [_, _, _, g, g, g, _, g, _, Y, _],
+    [g, _, _, _, _, g, _, _, _, _, _],
     [_, _, _, _, _, g, _, _, _, _, g],
     [g, g, _, _, _, _, _, _, _, g, g],
     [g, g, g, g, g, g, g, g, g, g, g]
@@ -218,7 +218,7 @@ class Platforms {
                     case g: this.platforms.push(new Platform(j * this.width, i * this.height, g           )); break;
                     case s: this.platforms.push(new Platform(j * this.width, i * this.height, s           )); break;
                     case X: this.platforms.push(new Platform(j * this.width, i * this.height, g, 75, 0 , 1)); break;
-                    case Y: this.platforms.push(new Platform(j * this.width, i * this.height, g, 0 , 75, 1)); break;
+                    case Y: this.platforms.push(new Platform(j * this.width, i * this.height, g, 0 , 75, 7)); break;
                     case Z: this.platforms.push(new Platform(j * this.width, i * this.height, g, 75, 75, 1)); break;
                 }
             }
